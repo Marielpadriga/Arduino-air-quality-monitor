@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arduino Air Pollution Monitoring</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #1e3c72, #2a5298);
+      color: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    /* Background Animation */
+    .background {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .background div {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      animation: floatAnimation linear infinite;
+    }
+    @keyframes floatAnimation {
+      0% { transform: translateY(0); opacity: 0.8; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+    
+    /* Header */
+    header {
+      font-size: 1.8rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.6);
+    }
+    
+    /* Card Container */
+    .cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      gap: 20px;
+    }
+    
+    /* Glassmorphic Cards */
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      width: 260px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
+    }
+    
+    /* Card Titles */
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #ffeb3b;
+    }
+    
+    /* Data Display */
+    .card p {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    
+    /* Refresh Button */
+    .refresh-btn {
+      margin-top: 30px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      background: #ffeb3b;
+      color: #333;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .refresh-btn:hover {
+      transform: scale(1.1);
+      background: #ffc107;
+    }
+    
+    /* Footer */
+    footer {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Animated Background -->
+  <div class="background"></div>
+  
+  <!-- Header -->
+  <header>
+    <h1>IoT Air Pollution Monitoring</h1>
+    <p>Real-time Air Quality, Temperature, and Humidity</p>
+  </header>
+  
+  <!-- Cards Display -->
+  <div class="cards">
+    <div class="card">
+      <h2>Air Quality</h2>
+      <p id="airQuality">-- PPM</p>
+    </div>
+    <div class="card">
+      <h2>Temperature</h2>
+      <p id="temperature">-- °C</p>
+    </div>
+    <div class="card">
+      <h2>Humidity</h2>
+      <p id="humidity">-- %</p>
+    </div>
+  </div>
+
+  <!-- Refresh Button -->
+  <button class="refresh-btn" onclick="fetchData()">Refresh Data</button>
+
+  <footer>
+    &copy; 2025 IoT Air Pollution Monitoring System
+  </footer>
+
+  <script>
+    // Function to create floating particles for the background animation
+    function createFloatingParticles() {
+      const background = document.querySelector(".background");
+      for (let i = 0; i < 40; i++) {
+        const bubble = document.createElement("div");
+        bubble.style.left = ${Math.random() * 100}vw;
+        bubble.style.animationDuration = ${3 + Math.random() * 7}s;
+        bubble.style.width = bubble.style.height = ${5 + Math.random() * 10}px;
+        background.appendChild(bubble);
+      }
+    }
+
+    // Function to simulate fetching data from your ESP8266 API.
+    function fetchData() {
+      // Replace with your API call: fetch("http://<your-esp8266-ip>/data")
+      setTimeout(() => {
+        const dummyData = {
+          air_quality: Math.floor(Math.random() * 3000),
+          temperature: (20 + Math.random() * 15).toFixed(1),
+          humidity: (30 + Math.random() * 50).toFixed(1)
+        };
+        updateDisplay(dummyData);
+      }, 500);
+    }
+    
+    // Function to update the display with fetched data
+    function updateDisplay(data) {
+      document.getElementById("airQuality").innerText = data.air_quality + " PPM";
+      document.getElementById("temperature").innerText = data.temperature + " °C";
+      document.getElementById("humidity").innerText = data.humidity + " %";
+    }
+    
+    // Auto-refresh data every 10 seconds
+    setInterval(fetchData, 10000);
+    
+    // Initialize
+    createFloatingParticles();
+    fetchData();
+  </script>
+
+</body>
+</html>
